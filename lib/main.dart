@@ -1,4 +1,5 @@
 
+import 'package:dgfhuss/providers/degree.dart';
 import 'package:flutter/material.dart'; //package that provide widgets (Google)
 import 'package:flutter/services.dart';
 
@@ -43,6 +44,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => NewsProvider(),
         ),
+        ChangeNotifierProxyProvider<AuthProvider,DegreeProvider>(
+          create: (ctx) => DegreeProvider(name: '',id: ''),
+          update: (ctx, auth, degree) => DegreeProvider(id: auth.student.id.toString(), name: auth.student.name),
+        ),
       ],
       child: Consumer<AuthProvider>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -51,7 +56,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: 'Tajawal',
             colorScheme: const ColorScheme.light(
-              primary: Color.fromRGBO(10, 35, 75, 1),
+              primary: Color.fromRGBO(24, 61, 121, 1),
               secondary: Color.fromRGBO(255, 255, 255, 1),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -142,12 +143,7 @@ class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
       ),
     ];
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text('طلب تظلم'),
-        centerTitle: true,
-      ),
+      appBar: const MyAppBar(pageTitle: 'طلب تظلم'),
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: Stepper(

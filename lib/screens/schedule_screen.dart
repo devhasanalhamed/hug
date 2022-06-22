@@ -1,3 +1,4 @@
+import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/material.dart';
 import '../models/schedule.dart';
 import '../providers/dummy_data.dart';
@@ -66,13 +67,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Widget build(BuildContext context) {
     //var _size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          foregroundColor: Theme.of(context).colorScheme.secondary,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text('الجدول الدراسي'),
-          centerTitle: true,
-        ),
+        appBar: const MyAppBar(pageTitle: 'الجدول الدراسي',),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

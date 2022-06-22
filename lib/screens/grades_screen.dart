@@ -1,3 +1,4 @@
+import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/material.dart';
 import '../models/degree_model.dart';
 import '../widgets/grades_display.dart';
@@ -42,12 +43,7 @@ class _GradesScreenState extends State<GradesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
-      appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text('بيان الدرجات'),
-        centerTitle: true,
-      ),
+      appBar: const MyAppBar(pageTitle: 'بيان الدرجات'),
       body: _semesterHandler == 0? const Center(
         child: Text('أختر البيان المطلوب'),
       )

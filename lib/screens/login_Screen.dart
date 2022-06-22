@@ -46,14 +46,6 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
     return Scaffold(
-      bottomSheet: SizedBox(
-        width: _screenSize.width,
-        child: const Text(
-          'جامعة حضرموت',
-          textDirection: TextDirection.rtl,
-          textAlign: TextAlign.center,
-        ),
-      ),
       resizeToAvoidBottomInset: false, //this will stop the screen resize while showing a keyboard
       body: Directionality(
         textDirection: TextDirection.rtl ,
@@ -61,7 +53,18 @@ class _LogInScreenState extends State<LogInScreen> {
           alignment: Alignment.bottomCenter,
           children: [
             Container(
-              color: Theme.of(context).colorScheme.primary,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color.fromRGBO(10, 33, 76, 1.0).withOpacity(1),
+                    const Color.fromRGBO(24, 61, 121, 1.0).withOpacity(1),
+                    const Color.fromRGBO(1, 90, 197, 1.0).withOpacity(1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  // stops: const [0, 1],
+                ),
+              ),
               // child: Column(
               //   children: [
               //     // Image.asset('assets/images/hadhramout.png')
@@ -73,7 +76,7 @@ class _LogInScreenState extends State<LogInScreen> {
               height: _screenSize.height * 0.6,
               width: _screenSize.width,
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: Colors.white70,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(25),
                   topLeft: Radius.circular(25),
@@ -271,8 +274,8 @@ class _LogInScreenState extends State<LogInScreen> {
               top: _screenSize.height * 0.1,
               child: Image.asset(
                 'assets/images/hadhramout.png',
-                height: 90,
-                width: 90,
+                height: 70,
+                width: 70,
               ),
             ),
           ],

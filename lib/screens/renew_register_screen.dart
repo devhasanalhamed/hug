@@ -1,3 +1,4 @@
+import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 class RenewRegisterScreen extends StatefulWidget {
@@ -12,12 +13,7 @@ class _RenewRegisterScreenState extends State<RenewRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text('تجديد القيد'),
-        centerTitle: true,
-      ),
+      appBar: const MyAppBar(pageTitle: 'تجديد القيد'),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -62,9 +58,9 @@ class _RenewRegisterScreenState extends State<RenewRegisterScreen> {
           ),
           ElevatedButton(
             onPressed: null,
-            child: Text('طلب تجديد'),
+            child: const Text('طلب تجديد'),
             style: ElevatedButton.styleFrom(
-                fixedSize: Size(MediaQuery.of(context).size.width/2, 50),
+                fixedSize: Size(MediaQuery.of(context).size.width, 50),
                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))
             ),
           ),
@@ -87,7 +83,7 @@ class _RenewRegisterScreenState extends State<RenewRegisterScreen> {
               );
             },
             style: ElevatedButton.styleFrom(
-                fixedSize: Size(MediaQuery.of(context).size.width/2, 50),
+                fixedSize: Size(MediaQuery.of(context).size.width, 55.0),
                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))
             ),
           ),

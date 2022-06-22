@@ -1,3 +1,4 @@
+import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart' as format;
@@ -33,12 +34,7 @@ class _UniversityCalenderScreenState extends State<UniversityCalenderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 216, 216, 216),
-      appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.secondary,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text('التقويم الجامعي'),
-        centerTitle: true,
-      ),
+      appBar: const MyAppBar(pageTitle: 'التقويم الجامعي'),
       body: Column(
         children: [
           Container(

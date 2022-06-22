@@ -34,7 +34,18 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: [
           Container(
-            color: const Color.fromRGBO(245, 245, 245, 0.9607843137254902),//Theme.of(context).colorScheme.primary,
+            // color: const Color.fromRGBO(245, 245, 245, 1),//Theme.of(context).colorScheme.primary,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  const Color.fromRGBO(245, 245, 245, 1.0).withOpacity(1),
+                  const Color.fromRGBO(245, 245, 245, 1.0).withOpacity(1),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                // stops: const [0, 1],
+              ),
+            ),
           ),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 15,sigmaY: 15,),

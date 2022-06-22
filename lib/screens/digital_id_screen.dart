@@ -1,3 +1,4 @@
+import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -22,12 +23,7 @@ class _DigitalCardScreenState extends State<DigitalCardScreen> {
     final _studentData = Provider.of<AuthProvider>(context).student;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
-      appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text('البطاقة الرقمية'),
-        centerTitle: true,
-      ),
+      appBar: const MyAppBar(pageTitle: 'البطاقة الرقمية'),
       body: FlipCard(
         fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
         direction: FlipDirection.HORIZONTAL, // default
