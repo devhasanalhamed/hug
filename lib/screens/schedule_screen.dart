@@ -1,7 +1,9 @@
-import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/material.dart';
+//import 'package:time_planner/time_planner.dart';
+// import 'package:hug/widgets/schedule/schedule_widget.dart';
 import '../models/schedule.dart';
 import '../providers/dummy_data.dart';
+import '../widgets/scheduleItem.dart';
 
 class ScheduleScreen extends StatefulWidget {
   static String routeName = 'schedule_screen';
@@ -67,7 +69,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Widget build(BuildContext context) {
     //var _size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: const MyAppBar(pageTitle: 'الجدول الدراسي',),
+        appBar: AppBar(
+          elevation: 0.0,
+          foregroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          title: const Text('الجدول الدراسي'),
+          centerTitle: true,
+        ),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -76,20 +84,20 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    // if (scheduleElement
-                    //     .any((element) => element.dayName == _days))
-                    //   ...(scheduleElement)
-                    //       .map(
-                    //         (e) => (e.dayName == _days)
-                    //             ? ScheduleItem(
-                    //                 subjectName: e.subjectName,
-                    //                 startTime: e.startTime,
-                    //                 endTime: e.endTime,
-                    //                 className: e.className)
-                    //             : const SizedBox.shrink(),
-                    //       )
-                    //       .toList()
-                    // else
+                    if (scheduleElement
+                        .any((element) => element.dayName == _days))
+                      ...(scheduleElement)
+                          .map(
+                            (e) => (e.dayName == _days)
+                                ? ScheduleItem(
+                                    subjectName: e.subjectName,
+                                    startTime: e.startTime,
+                                    endTime: e.endTime,
+                                    className: e.className)
+                                : const SizedBox.shrink(),
+                          )
+                          .toList()
+                    else
                       Center(
                           child: Column(
                         children: [
