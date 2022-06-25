@@ -28,11 +28,13 @@ class Subjects {
   });
 }
 class SemesterDegree{
+  final String semesterOrder;
   final String semesterName;
   final String semesterAvg;
   final List<Subjects> subjects;
 
   SemesterDegree({
+    required this.semesterOrder,
     required this.semesterName,
     required this.semesterAvg,
     required this.subjects,
@@ -41,12 +43,27 @@ class SemesterDegree{
 
 class DegreeModel {
   final String levelName;
-  final List<SemesterDegree> semesterModel;
+  final List<dynamic> semesterModel;
   final int levelOrder;
 
   DegreeModel({
     required this.levelName,
     required this.semesterModel,
     required this.levelOrder,
+  });
+}
+
+class FinalDegreeModel {
+  final String levelName;
+  final String semesterName;
+  final String semesterAVG;
+  final List<dynamic> subjects;
+  final String semesterOrder;
+  FinalDegreeModel({
+    required this.levelName,
+    required this.semesterName,
+    required this.semesterAVG,
+    required this.subjects,
+    required this.semesterOrder,
   });
 }
