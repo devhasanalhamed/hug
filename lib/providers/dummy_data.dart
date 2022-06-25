@@ -236,9 +236,6 @@ class AppStructure {
     ScheduleElement('VLSI Circuit Design Lab', 'أ. وفاء', 8,'ص', 10,'ص', 'D204', Days.monday),
     ScheduleElement('Artificial Intelligent Lab', 'م. عصمت', 10,'ص', 12,'م', 'B202', Days.monday),
     ScheduleElement('Data Security Lab', 'أ. فاطمة بافرج', 12,'م', 2,'م', 'A204', Days.monday),
-    ScheduleElement('Real-Time Computer Control Lab', 'م. علاء باسواقي', 8,'ص', 10,'ص', 'A204', Days.tuesday),
-    ScheduleElement('Computer Network', 'د. مكارم بامطرف', 8,'ص', 10,'ص', 'C203', Days.wednesday),
-    ScheduleElement('Real-Time Computer Control', 'م. علاء باسواقي', 8,'ص', 10,'ص', 'C203', Days.thursday),
     ScheduleElement('Data Security', 'د. مكارم بامطرف', 10,'ص', 12,'م', 'C202', Days.thursday),
     ScheduleElement('VLSI Circuit Design', 'د. خالد فوزي', 12,'م', 2,'م', 'C203', Days.thursday),
   ];

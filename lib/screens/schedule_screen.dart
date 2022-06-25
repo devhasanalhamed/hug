@@ -91,8 +91,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             (e) => (e.dayName == _days)
                                 ? ScheduleItem(
                                     subjectName: e.subjectName,
-                                    startTime: e.startTime,
-                                    endTime: e.endTime,
+                                    startTime: e.startTime.toString(),
+                                    endTime: e.endTime.toString(),
                                     className: e.className)
                                 : const SizedBox.shrink(),
                           )

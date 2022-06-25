@@ -1,3 +1,4 @@
+import 'package:dgfhuss/widgets/buttons/elementary_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -85,8 +86,8 @@ class _LogInScreenState extends State<LogInScreen> {
               child: Form(
                 key: _formKey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _screenSize.width * 0.08,
                   ),
                   child: ListView(
                     children: [
@@ -214,19 +215,20 @@ class _LogInScreenState extends State<LogInScreen> {
                       const SizedBox(
                         height: 80,
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          fixedSize:
-                          Size(
-                            _screenSize.width,
-                            55.0,),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15))
-                          )
-                        ),
-                        onPressed: _onSave,
-                        child: const Text('تسجيل الدخول'),
-                      ),
+                      // ElevatedButton(
+                      //   style: ElevatedButton.styleFrom(
+                      //     fixedSize:
+                      //     Size(
+                      //       _screenSize.width,
+                      //       5115.0,),
+                      //     shape: const RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.all(Radius.circular(15))
+                      //     )
+                      //   ),
+                      //   onPressed: _onSave,
+                      //   child: const Text('تسجيل الدخول'),
+                      // ),
+                      ElementaryButton('تسجيل الدخول',_onSave,null),
                       if(_userName.isNotEmpty)TextButton(
                         child: const Text('تسجيل مستخدم آخر'),
                         onPressed: (){

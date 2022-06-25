@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ScheduleItem extends StatelessWidget {
-  final subjectName;
-  final startTime;
-  final endTime;
-  final className;
+  final String subjectName;
+  final String startTime;
+  final String endTime;
+  final String className;
 
   const ScheduleItem({
     required this.subjectName,
