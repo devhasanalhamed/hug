@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
         //     opacity: 1
         // ),
         // scaffoldBackgroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
-          home:  auth.isAuth? HomePageWithBottomBar(): LogInScreen(),
+          home: auth.isAuth? const HomePageWithBottomBar():const LogInScreen(),
       routes: {
         ProfileScreen.routeName : (ctx) => const ProfileScreen(),
         NewsScreen.routeName : (ctx) => const NewsScreen(),

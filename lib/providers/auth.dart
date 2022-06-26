@@ -44,7 +44,6 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
     final _id = prefs.getString('id'); //user data
     print('get data: $_id');
     if (_rememberMe != null){
-      print('triggired');
       rememberMe = _rememberMe;
       if (_savedName != null){
         savedName = _savedName;
@@ -72,7 +71,6 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
         'password': password,
       });
       if (response.statusCode == 200){
-        print('success login');
         final responseData = json.decode(response.body);
         final Student studentData = Student(
             name: responseData['name'],

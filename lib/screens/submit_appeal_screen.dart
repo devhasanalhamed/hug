@@ -28,53 +28,56 @@ class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
         title: const Text('أختر من قائمة المواد المتاحة'),
         content: Container(
           color: Colors.grey.shade200,
-          height: 140,
+          height: 170,
           width: double.infinity,
-          child: Stack(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: appealElemetns.length,
-                itemBuilder: (ctx, index) => SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            appealElemetns[index].name,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 18
-                            ),
-                          ),
-                          ElevatedButton(onPressed: (){
-                            setState(() {
-                              _currentStep += 1;
-                              print(appealElemetns[index].name);
-                              _post = AppealPost(appealElemetns[index].name, true, '', AppealType.reSum);
-                            });
-                          }, child: const Text('إختيار'))
-                        ],
-                      ),
-                    ),
-                  ),
+              Container(
+                height: 30,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                child: Icon(
+                  FontAwesomeIcons.arrowLeft,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
-              Positioned(
-                top: 5,
-                left: 5,
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: Icon(
-                    FontAwesomeIcons.arrowLeft,
-                    color: Theme.of(context).colorScheme.secondary,
+              SizedBox(
+                height: 140,
+                width: double.infinity,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: appealElemetns.length,
+                  itemBuilder: (ctx, index) => SizedBox(
+                    height: 150,
+                    width: 150,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              appealElemetns[index].name,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 18
+                              ),
+                            ),
+                            ElevatedButton(onPressed: (){
+                              setState(() {
+                                _currentStep += 1;
+                                print(appealElemetns[index].name);
+                                _post = AppealPost(appealElemetns[index].name, true, '', AppealType.reSum);
+                              });
+                            }, child: const Text('إختيار'))
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -120,7 +123,7 @@ class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
         title: const Text('الملاحظات'),
         content: TextFormField(
           style: const TextStyle(
-            fontSize: 12,
+            fontSize: 16,
             color: Colors.black
           ),
           decoration: const InputDecoration(

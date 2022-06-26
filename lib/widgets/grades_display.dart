@@ -27,7 +27,9 @@ class GradesDisplay extends StatelessWidget {
                 child: Text(
                   nameOfSubject,
                   textDirection: TextDirection.rtl,
-                  style: const TextStyle(color: Colors.black),
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
@@ -36,13 +38,15 @@ class GradesDisplay extends StatelessWidget {
               children: [
                 Text(
                   gradeOfSubject,
-                  style: const TextStyle(color: Colors.black),
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
                 ),
                 const Text(
                   '/150',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 10,
+                    fontSize: 12,
                   ),
                 ),
               ],

@@ -1,3 +1,4 @@
+import 'package:dgfhuss/providers/dummy_data.dart';
 import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -15,13 +16,14 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
+  final _list = AppStructure().newsElement;
   @override
   Widget build(BuildContext context) {
     final news = Provider.of<NewsProvider>(context).newsList;
     return Scaffold(
       appBar: const MyAppBar(pageTitle: 'الأخبار'),
       body: ListView.builder(
-        itemCount: news.length,
+        itemCount: _list.length,
         itemBuilder: (ctx, i) {
           return Padding(
             padding: const EdgeInsets.symmetric(
@@ -35,7 +37,13 @@ class _NewsScreenState extends State<NewsScreen> {
               ),
               child: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, NewsViewer.routeName,arguments: news[i]);
+                  // Navigator.pushNamed(context, NewsViewer.routeName,arguments: news[i]);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NewsViewer(),
+                      settings: RouteSettings(arguments: news[i]),
+                  )
+                  );
                 },
                 child: SizedBox(
                   height: 180,
@@ -71,7 +79,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      news[i].title,
+                                      _list[i].title,
                                       textAlign: TextAlign.right,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -85,7 +93,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 height: 70,
                               ),
                               Text(
-                                news[i].content,
+                                _list[i].content,
                                 textAlign: TextAlign.right,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

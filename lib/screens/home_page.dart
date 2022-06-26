@@ -22,10 +22,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
   final GlobalKey<ScaffoldState> _scaffold = GlobalKey<ScaffoldState>(); //allow to open drawer
   List<NewsModel> news = AppStructure().newsElement;
   @override
   Widget build(BuildContext context) {
+    // print(MediaQuery.of(context).size.height);
+    // print(MediaQuery.of(context).padding);
+    // print(MediaQuery.of(context).padding.top);
+    // print(AppBar().preferredSize.height);
+    // print(kToolbarHeight);
+    // print(MediaQuery.of(context).viewPadding);
+    // print(MediaQuery.of(context).viewPadding.top);
     return Scaffold(
       key: _scaffold,
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -34,18 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: [
           Container(
-            // color: const Color.fromRGBO(245, 245, 245, 1),//Theme.of(context).colorScheme.primary,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color.fromRGBO(245, 245, 245, 1.0).withOpacity(1),
-                  const Color.fromRGBO(245, 245, 245, 1.0).withOpacity(1),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                // stops: const [0, 1],
-              ),
-            ),
+            color: const Color.fromRGBO(245, 245, 245, 1),//Theme.of(context).colorScheme.primary,
           ),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 15,sigmaY: 15,),
@@ -65,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
                 child: Column(
                   children: [
                     CarouselSlider.builder(
@@ -115,7 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                           ),
-
                         ],
                       ),
                       options: CarouselOptions(
@@ -123,18 +123,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         viewportFraction: 1,
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
                   ],
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 20,
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: GridView(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
