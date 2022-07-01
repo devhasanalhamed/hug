@@ -31,18 +31,29 @@ class DegreeProvider with ChangeNotifier { //provide get degree function but nee
         semesterModel: element['semesters'],
       ));
     });
+    // print(_fetchedDegrees[1].levelName);
+    // print(_fetchedDegrees[1].semesterModel);
+    // print(_fetchedDegrees[1].levelOrder);
+    var controller = 0;
     _fetchedDegrees.forEach((level) {
       level.semesterModel.forEach((semester) {
         final test = FinalDegreeModel(
           levelName: level.levelName,
           semesterName: semester['semester'],
           semesterAVG: semester['semAvg'],
-          semesterOrder: '0',
+          semesterOrder: controller,
           subjects: semester['subjects'],
         );
-        print(test.subjects);
+        controller ++;
+        // print(test.subjects);
+        _listOfDegrees.add(test);
       });
     });
-  // print(_listOfDegrees.length);
+    var x = 3;
+    print(_listOfDegrees[x].levelName);
+    print(_listOfDegrees[x].subjects);
+    print(_listOfDegrees[x].semesterAVG);
+    print(_listOfDegrees[x].semesterOrder);
+    print(_listOfDegrees[x].levelName);
   }
 }

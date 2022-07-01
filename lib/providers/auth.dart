@@ -18,6 +18,7 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
       level: '',
       department: '',
       typeOfRegister: '',
+      gpa:'',
   );
 
   var rememberMe = false;
@@ -29,7 +30,7 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
   }
 
   bool get isAuth{ //a simple method to check if it's auth to move to the next screen or not
-    if(_student.state == true && _student.id > 4 && _student.name.length > 4){
+    if(_student.state == true && _student.id > 5 && _student.name.length > 4){
       return true;
     }
     return false;
@@ -64,7 +65,7 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
   }
 
   Future<void> authLogin(userName, password, rememberMe) async{ //a function to login and get student data from the server
-    const url ='http://10.0.2.2:3001';
+    const url ='http://10.0.2.2:3001/studentLogin';
     try {
       final response = await http.post(Uri.parse(url),body: {
         'username': userName,
@@ -72,6 +73,7 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
       });
       if (response.statusCode == 200){
         final responseData = json.decode(response.body);
+        print(responseData);
         final Student studentData = Student(
             name: responseData['name'],
             id: responseData['username'],
@@ -83,6 +85,7 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
             level: responseData['level'],
             department: responseData['department'],
             typeOfRegister: responseData['typeOfRegister'],
+            gpa: responseData['GPA'],
         );
         _student = studentData;
         final prefs = await SharedPreferences.getInstance();
@@ -117,6 +120,7 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
       level: '',
       department: '',
       typeOfRegister: '',
+      gpa: '',
     );
     notifyListeners();
   }

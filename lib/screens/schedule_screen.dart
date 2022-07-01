@@ -60,7 +60,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       },
       child: Text(
         day,
-        style: Theme.of(context).textTheme.headline2,
+        style: const TextStyle(
+          fontSize: 14,
+          color: Colors.black87,
+        ),
       ),
     );
   }

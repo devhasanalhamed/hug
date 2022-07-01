@@ -1,3 +1,4 @@
+import 'package:dgfhuss/providers/auth.dart';
 import 'package:dgfhuss/providers/degree.dart';
 import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:dgfhuss/widgets/buttons/elementary_button.dart';
@@ -8,6 +9,7 @@ import '../widgets/grades_display.dart';
 import 'package:provider/provider.dart';
 import '../providers/dummy_data.dart';
 import '../models/semesters.dart';
+import '../providers/degree.dart';
 
 import '../widgets/semester_selecter.dart';
 
@@ -21,8 +23,6 @@ class GradesScreen extends StatefulWidget {
 }
 
 class _GradesScreenState extends State<GradesScreen> {
-  List<DegreesModel> degrees = AppStructure().degreeModels;
-  // Initial Selected Value
   int _semesterHandler = 1;
 
   void selectSemester(val) {
@@ -31,19 +31,20 @@ class _GradesScreenState extends State<GradesScreen> {
     });
   }
 
-  DegreesModel? get currentDegree {
-    if (degrees.any((element) {
-      return element.sheetOrder == _semesterHandler;
+  FinalDegreeModel? get currentDegree {
+    if (Provider.of<DegreeProvider>(context,listen: false).listOfDegrees.any((element) {
+      return element.semesterOrder == _semesterHandler;
     }))
     {
-      return degrees.firstWhere((element) {
-        return element.sheetOrder == _semesterHandler;
+      return Provider.of<DegreeProvider>(context,listen: false).listOfDegrees.firstWhere((element) {
+        return element.semesterOrder == _semesterHandler;
       });
     }
     return null;
   }
   @override
   Widget build(BuildContext context) {
+    var grades = Provider.of<DegreeProvider>(context,listen: true).listOfDegrees;
     final _screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
@@ -51,7 +52,7 @@ class _GradesScreenState extends State<GradesScreen> {
       body: FutureBuilder(
         future: Provider.of<DegreeProvider>(context,listen: false).getDegree(),
         builder: (ctx, snapshot){
-          if (snapshot.connectionState == ConnectionState.done){
+          if (snapshot.connectionState == ConnectionState.waiting){
             return Center(
               child: SizedBox(
                 width: 200,
@@ -64,12 +65,14 @@ class _GradesScreenState extends State<GradesScreen> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      CircularProgressIndicator(),
-                      SizedBox(
+                    children: [
+                      CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(
                         height: 30,
                       ),
-                      Text(
+                      const Text(
                         'الرجاء الإنتظار قليلاَ'
                       ),
                     ],
@@ -80,10 +83,7 @@ class _GradesScreenState extends State<GradesScreen> {
             );
           }
           else{
-            return _semesterHandler == 0? const Center(
-              child: Text('أختر البيان المطلوب'),
-            )
-                :Padding(
+            return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 4),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,15 +98,15 @@ class _GradesScreenState extends State<GradesScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text(
-                            'المعدل التراكمي: 84%',
+                          Text(
+                            'المعدل التراكمي: ${Provider.of<AuthProvider>(context,listen: false).student.gpa}',
                             textDirection: TextDirection.rtl,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                             ),
                           ),
                           Text(
-                            currentDegree != null?' المعدل الفصلي: ${currentDegree!.sheetOrder}': 'لا توجد بيانات',
+                            ' المعدل الفصلي: ${currentDegree!.semesterAVG}',
                             textDirection: TextDirection.rtl,
                             style: const TextStyle(
                               fontSize: 18,
@@ -117,7 +117,7 @@ class _GradesScreenState extends State<GradesScreen> {
                       ),
                     ),
                   ),
-                  currentDegree != null? Expanded(
+                  Expanded(
                     flex: 3,
                     child: GridView.builder(
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -126,42 +126,20 @@ class _GradesScreenState extends State<GradesScreen> {
                           mainAxisSpacing: 5,
                           childAspectRatio: 1.8,
                         ),
-                        itemCount: currentDegree!.degrees.length,
+                        itemCount: currentDegree!.subjects.length,
                         itemBuilder: (ctx, index) {
                           return GradesDisplay(
                             nameOfSubject:
-                            currentDegree!.degrees.keys.toList()[index],
+                            currentDegree!.subjects[index]['name'],
                             gradeOfSubject:
-                            currentDegree!.degrees.values.toList()[index],
+                            '${currentDegree!.subjects[index]['degree']}',
                           );
                         }),
-                  )
-                      : const Text(
-                    'لا يوجد تطابق',
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: _screenSize.width *0.08),
                     child: const ElementaryButton('طلب البيان', null, null),
                   ),
-                  // ElevatedButton(
-                  //   child: Text(
-                  //     'طلب البيان',
-                  //     textDirection: TextDirection.rtl,
-                  //     style: TextStyle(
-                  //       fontSize: 16,
-                  //     ),
-                  //   ),
-                  //   onPressed: currentDegree != null?(){
-                  //     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  //     ScaffoldMessenger.of(context).showSnackBar(
-                  //         const SnackBar(content: Text('سيتم عرض pdf'))
-                  //     );
-                  //   }:null,
-                  //   style: ElevatedButton.styleFrom(
-                  //     fixedSize: Size(MediaQuery.of(context).size.width/2, 50),
-                  //     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15)))
-                  //   ),
-                  // ),
                   SizedBox(
                     height: 100,
                     width: double.infinity,

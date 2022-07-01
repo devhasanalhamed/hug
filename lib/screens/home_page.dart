@@ -142,6 +142,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       return Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
+                          // gradient: LinearGradient(
+                          //   colors: [
+                          //     const Color.fromRGBO(10, 33, 76, 1.0).withOpacity(1),
+                          //     const Color.fromRGBO(24, 61, 121, 1.0).withOpacity(1),
+                          //     const Color.fromRGBO(1, 90, 197, 1.0).withOpacity(1),
+                          //   ],
+                          //   begin: Alignment.topLeft,
+                          //   end: Alignment.bottomRight,
+                          //   // stops: const [0, 1],
+                          // ),
                           color: Theme.of(context).colorScheme.primary,
                           borderRadius:  const BorderRadius.all(
                               Radius.circular(10.0)

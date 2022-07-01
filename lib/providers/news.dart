@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 
 import '../models/news.dart';
 
+import 'package:intl/intl.dart';
+
+
 class NewsProvider with ChangeNotifier{
 
   List<NewsModel> _newsList =[];
