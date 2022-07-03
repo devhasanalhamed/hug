@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: Image.asset(news[index].imageLink,fit: BoxFit.cover,width: double.infinity,)),
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.8),
+                              color: Colors.white.withOpacity(0.8),
                               borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15))
                             ),
                             child: Padding(
@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 news[index].title,
                                 textDirection: TextDirection.rtl,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontSize: 15.0
                                 ),
                               ),
