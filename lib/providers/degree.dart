@@ -34,7 +34,7 @@ class DegreeProvider with ChangeNotifier { //provide get degree function but nee
     // print(_fetchedDegrees[1].levelName);
     // print(_fetchedDegrees[1].semesterModel);
     // print(_fetchedDegrees[1].levelOrder);
-    var controller = 0;
+    var controller = 1;
     _fetchedDegrees.forEach((level) {
       level.semesterModel.forEach((semester) {
         final test = FinalDegreeModel(
@@ -49,11 +49,12 @@ class DegreeProvider with ChangeNotifier { //provide get degree function but nee
         _listOfDegrees.add(test);
       });
     });
-    var x = 3;
-    print(_listOfDegrees[x].levelName);
-    print(_listOfDegrees[x].subjects);
-    print(_listOfDegrees[x].semesterAVG);
-    print(_listOfDegrees[x].semesterOrder);
-    print(_listOfDegrees[x].levelName);
+    for (var i in _listOfDegrees){
+      print(i.semesterOrder);
+      print(i.levelName);
+      print(i.semesterName);
+      print(i.subjects);
+      print(i.semesterAVG);
+    }
   }
 }

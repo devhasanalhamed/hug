@@ -101,6 +101,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.right,
+                        maxLength: 11,
                         onSaved: (value){
                           if (value != null){
                             _userName = value;

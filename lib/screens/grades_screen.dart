@@ -2,6 +2,7 @@ import 'package:dgfhuss/providers/auth.dart';
 import 'package:dgfhuss/providers/degree.dart';
 import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:dgfhuss/widgets/buttons/elementary_button.dart';
+import 'package:dgfhuss/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import '../models/degree_model.dart';
 import '../widgets/grades_display.dart';
@@ -24,7 +25,7 @@ class GradesScreen extends StatefulWidget {
 
 class _GradesScreenState extends State<GradesScreen> {
   int _semesterHandler = 1;
-
+  late Future getDegrees;
   void selectSemester(val) {
     setState(() {
       _semesterHandler = val;
@@ -32,55 +33,27 @@ class _GradesScreenState extends State<GradesScreen> {
   }
 
   FinalDegreeModel? get currentDegree {
-    if (Provider.of<DegreeProvider>(context,listen: false).listOfDegrees.any((element) {
+    return Provider.of<DegreeProvider>(context,listen: false).listOfDegrees.firstWhere((element) {
       return element.semesterOrder == _semesterHandler;
-    }))
-    {
-      return Provider.of<DegreeProvider>(context,listen: false).listOfDegrees.firstWhere((element) {
-        return element.semesterOrder == _semesterHandler;
-      });
-    }
-    return null;
+    });
+  }
+
+  @override
+  void initState() {
+    getDegrees = Provider.of<DegreeProvider>(context,listen: false).getDegree();
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    var grades = Provider.of<DegreeProvider>(context,listen: true).listOfDegrees;
     final _screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: const MyAppBar(pageTitle: 'بيان الدرجات'),
       body: FutureBuilder(
-        future: Provider.of<DegreeProvider>(context,listen: false).getDegree(),
+        future: getDegrees,
         builder: (ctx, snapshot){
           if (snapshot.connectionState == ConnectionState.waiting){
-            return Center(
-              child: SizedBox(
-                width: 200,
-                height: 150,
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15)
-                    )
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Text(
-                        'الرجاء الإنتظار قليلاَ'
-                      ),
-                    ],
-                  ),
-
-                ),
-              ),
-            );
+            return const LoadingWidget('الرجاء الإنتظار قليلاَ');
           }
           else{
             return Padding(

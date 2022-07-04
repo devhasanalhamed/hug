@@ -1,7 +1,11 @@
+import 'package:dgfhuss/models/degree_model.dart';
+import 'package:dgfhuss/providers/degree.dart';
 import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
+import 'package:dgfhuss/widgets/loading_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import '../providers/dummy_data.dart';
 
 import '../models/appeal.dart';
@@ -16,9 +20,23 @@ class SubmitAppealScreen extends StatefulWidget {
 }
 
 class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
+  late Future getSubjects;
+  late List<FinalDegreeModel> extractor;
   var _currentStep = 0;
   var _post = AppealPost('', true, '', AppealType.reSum);
   List<AppealElement> appealElemetns = AppStructure().appealElements;
+
+  @override
+  void initState() {
+    getSubjects = Provider.of<DegreeProvider>(context,listen: false).getDegree();
+    extractor = Provider.of<DegreeProvider>(context,listen: false).listOfDegrees;
+    super.initState();
+  }
+
+
+  List<dynamic> get validSubjects{
+    return extractor.last.subjects;
+  }
   @override
   Widget build(BuildContext context) {
     List<Step> getSteps = [
@@ -50,7 +68,7 @@ class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
                 width: double.infinity,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: appealElemetns.length,
+                  itemCount: validSubjects.length,
                   itemBuilder: (ctx, index) => SizedBox(
                     height: 150,
                     width: 150,
@@ -61,7 +79,7 @@ class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              appealElemetns[index].name,
+                              validSubjects[index]['name'],
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 18
@@ -70,8 +88,8 @@ class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
                             ElevatedButton(onPressed: (){
                               setState(() {
                                 _currentStep += 1;
-                                print(appealElemetns[index].name);
-                                _post = AppealPost(appealElemetns[index].name, true, '', AppealType.reSum);
+                                print(validSubjects[index]['name']);
+                                _post = AppealPost(validSubjects[index]['name'], true, '', AppealType.reSum);
                               });
                             }, child: const Text('إختيار'))
                           ],
@@ -153,61 +171,71 @@ class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
     ];
     return Scaffold(
       appBar: const MyAppBar(pageTitle: 'طلب تظلم'),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Stepper(
-          currentStep: _currentStep,
-          onStepContinue: () {
-            if (_currentStep != 4) {
-              setState(() {
-                _currentStep += 1;
-              });
-            }
-            if (_currentStep == 4) {
-              setState(() {
-                _currentStep = 0;
-              });
-            }
-            else {
-              null;
-            }
-          },
-          onStepCancel: () {
-            if (_currentStep == 0) {
-              Navigator.of(context).pop();
-            } else {
-              setState(() {
-                _currentStep -= 1;
-              });
-            }
-          },
-          controlsBuilder: (ctx, ControlsDetails details) {
-            return _currentStep <=1?Row(
-              children: [
-                TextButton(
-                  onPressed: details.onStepCancel,
-                  child: Text(_currentStep == 0 ? 'إلغاء' : 'السابق'),
-                ),
-              ],
-            ):Row(
-              children: [
-                TextButton(
-                  onPressed: details.onStepContinue,
-                  child: ElevatedButton(
-                    onPressed: details.onStepContinue,
-                    child: Text(_currentStep == 3 ?  'تأكيد':'التالي'),
-                  ),
-                ),
-                TextButton(
-                  onPressed: details.onStepCancel,
-                  child: Text(_currentStep == 0 ? 'إلغاء' : 'السابق'),
-                ),
-              ],
+      body: FutureBuilder(
+        future: getSubjects,
+        builder: (ctx, snapshot){
+          if (snapshot.connectionState == ConnectionState.waiting){
+            return const LoadingWidget('الرجاء الإنتظار قليلاَ');
+          }
+          else {
+            return Directionality(
+              textDirection: TextDirection.rtl,
+              child: Stepper(
+                currentStep: _currentStep,
+                onStepContinue: () {
+                  if (_currentStep != 4) {
+                    setState(() {
+                      _currentStep += 1;
+                    });
+                  }
+                  if (_currentStep == 4) {
+                    setState(() {
+                      _currentStep = 0;
+                    });
+                  }
+                  else {
+                    null;
+                  }
+                },
+                onStepCancel: () {
+                  if (_currentStep == 0) {
+                    Navigator.of(context).pop();
+                  } else {
+                    setState(() {
+                      _currentStep -= 1;
+                    });
+                  }
+                },
+                controlsBuilder: (ctx, ControlsDetails details) {
+                  return _currentStep <=1?Row(
+                    children: [
+                      TextButton(
+                        onPressed: details.onStepCancel,
+                        child: Text(_currentStep == 0 ? 'إلغاء' : 'السابق'),
+                      ),
+                    ],
+                  ):Row(
+                    children: [
+                      TextButton(
+                        onPressed: details.onStepContinue,
+                        child: ElevatedButton(
+                          onPressed: details.onStepContinue,
+                          child: Text(_currentStep == 3 ?  'تأكيد':'التالي'),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: details.onStepCancel,
+                        child: Text(_currentStep == 0 ? 'إلغاء' : 'السابق'),
+                      ),
+                    ],
+                  );
+                },
+                steps: getSteps,
+              ),
             );
-          },
-          steps: getSteps,
-        ),
-      ),
+          }
+        }
+      )
     );
   }
 }
