@@ -19,6 +19,11 @@ class GrievancesProvider with ChangeNotifier { //provide get degree function but
 
   final List<FinalDegreeModel> _listOfDegrees = [];
 
+  List<dynamic> get validSubjects{
+    return _listOfDegrees.last.subjects;
+  }
+
+
   Future<void> getDegree() async {
     final url = 'http://10.0.2.2:3001/degree?name=${studentCopy!.name}&username=${studentCopy!.id}'; //assertion query into url
     final response = await http.get(Uri.parse(url));
