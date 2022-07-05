@@ -15,7 +15,7 @@ import '../screens/grades_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/manual_screen.dart';
-import '../screens/submit_appeal_screen.dart';
+import '../screens/grievances_screen.dart';
 import '../screens/renew_register_screen.dart';
 import '../screens/university_calender_screen.dart';
 import '../screens/schedule_screen.dart';
@@ -84,7 +84,7 @@ class AppStructure {
     GridElement(
       name: 'طلب تظلم',
       icon: FontAwesomeIcons.scaleBalanced,
-      routeName: SubmitAppealScreen.routeName,
+      routeName: GrievancesScreen.routeName,
       color: Colors.green,
     ),
     GridElement(

@@ -1,5 +1,6 @@
 // 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
 import 'package:dgfhuss/providers/degree.dart';
+import 'package:dgfhuss/providers/grievances.dart';
 import 'package:flutter/material.dart'; //package that provide widgets (Google)
 import 'package:flutter/services.dart';
 
@@ -15,7 +16,7 @@ import './screens/grades_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/manual_screen.dart';
 import './screens/profile_screen.dart';
-import './screens/submit_appeal_screen.dart';
+import './screens/grievances_screen.dart';
 import './screens/renew_register_screen.dart';
 import './screens/university_calender_screen.dart';
 import './screens/schedule_screen.dart';
@@ -35,7 +36,6 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp
     ]);
-    ThemeData myTheme = ThemeData() ;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider( // a listener in the change of Auth state
@@ -47,6 +47,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider,DegreeProvider>(
           create: (ctx) => DegreeProvider(name: '',id: ''),
           update: (ctx, auth, degree) => DegreeProvider(id: auth.student.id.toString(), name: auth.student.name),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider,GrievancesProvider>(
+          create: (ctx) => GrievancesProvider(studentCopy: null),
+          update: (ctx, auth, grievance) => GrievancesProvider(studentCopy: auth.student),
         ),
       ],
       child: Consumer<AuthProvider>(
@@ -111,7 +115,7 @@ class MyApp extends StatelessWidget {
         GradesScreen.routeName : (ctx) => const GradesScreen(),
         ManualScreen.routeName : (ctx) => const ManualScreen(),
         SettingsScreen.routeName : (ctx) => const SettingsScreen(),
-        SubmitAppealScreen.routeName : (ctx) => const SubmitAppealScreen(),
+        GrievancesScreen.routeName : (ctx) => const GrievancesScreen(),
         RenewRegisterScreen.routeName: (ctx) => const RenewRegisterScreen(),
         UniversityCalenderScreen.routeName: (ctx) => const UniversityCalenderScreen(),
         ScheduleScreen.routeName: (ctx) => const ScheduleScreen(),

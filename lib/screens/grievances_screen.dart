@@ -10,16 +10,16 @@ import '../providers/dummy_data.dart';
 
 import '../models/appeal.dart';
 
-class SubmitAppealScreen extends StatefulWidget {
+class GrievancesScreen extends StatefulWidget {
   static String routeName = 'submit_appeal_screen';
 
-  const SubmitAppealScreen({Key? key}) : super(key: key);
+  const GrievancesScreen({Key? key}) : super(key: key);
 
   @override
-  _SubmitAppealScreenState createState() => _SubmitAppealScreenState();
+  _GrievancesScreenState createState() => _GrievancesScreenState();
 }
 
-class _SubmitAppealScreenState extends State<SubmitAppealScreen> {
+class _GrievancesScreenState extends State<GrievancesScreen> {
   late Future getSubjects;
   late List<FinalDegreeModel> extractor;
   var _currentStep = 0;
