@@ -36,5 +36,6 @@ class NewsProvider with ChangeNotifier{
     catch(error){
       rethrow;
     }
+    notifyListeners();
   }
 }

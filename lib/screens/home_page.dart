@@ -1,11 +1,14 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dgfhuss/providers/news.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../models/news.dart';
 
+import '../providers/announcement.dart';
 import '../providers/dummy_data.dart';
 import '../widgets/appbar/my_appbar.dart';
 
@@ -25,19 +28,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    Provider.of<AnnouncementProvider>(context,listen: false).getAnnouncement();
+    Provider.of<AnnouncementProvider>(context,listen: false).getPersonalAnnouncement();
     super.initState();
   }
   final GlobalKey<ScaffoldState> _scaffold = GlobalKey<ScaffoldState>(); //allow to open drawer
-  List<NewsModel> news = AppStructure().newsElement;
   @override
   Widget build(BuildContext context) {
-    // print(MediaQuery.of(context).size.height);
-    // print(MediaQuery.of(context).padding);
-    // print(MediaQuery.of(context).padding.top);
-    // print(AppBar().preferredSize.height);
-    // print(kToolbarHeight);
-    // print(MediaQuery.of(context).viewPadding);
-    // print(MediaQuery.of(context).viewPadding.top);
+  List<NewsModel> news = AppStructure().newsElement;
     return Scaffold(
       key: _scaffold,
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -70,17 +68,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   children: [
                     CarouselSlider.builder(
-                      itemCount: 3,
+                      itemCount: news.length,
                       itemBuilder: (ctx, index, realIndex) => Stack(
                         alignment: Alignment.bottomRight,
                         children: [
                           ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(15)),
-                              child: Image.asset(news[index].imageLink,fit: BoxFit.cover,width: double.infinity,)),
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            child: Image.asset(
+                              news[index].imageLink,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              errorBuilder: (ctx, url, error) => const Center(child: Text('no loaded image')),
+                            ),
+                          ),
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.8),
-                              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15))
+                                color: Colors.black.withOpacity(0.8),
+                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15))
                             ),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -88,8 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 news[index].title,
                                 textDirection: TextDirection.rtl,
                                 style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15.0
+                                    color: Colors.white,
+                                    fontSize: 15.0
                                 ),
                               ),
                             ),

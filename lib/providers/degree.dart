@@ -1,6 +1,13 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 
 import '../models/degree_model.dart';
+import '../models/student_information.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -8,7 +15,8 @@ import 'package:http/http.dart' as http;
 class DegreeProvider with ChangeNotifier { //provide get degree function but need name and id
   final String id;
   final String name;
-  DegreeProvider({required this.id, required this.name}); // a constructor to pass data
+  final Student? student;
+  DegreeProvider({required this.id, required this.name,required this.student}); // a constructor to pass data
 
 
   final List<DegreeModel> _fetchedDegrees = [];
@@ -22,6 +30,7 @@ class DegreeProvider with ChangeNotifier { //provide get degree function but nee
   Future<void> getDegree() async {
     final url = 'http://10.0.2.2:3001/degree?name=$name&username=$id'; //assertion query into url
     final response = await http.get(Uri.parse(url));
+    print(response.statusCode);
     final responseData = json.decode(response.body) as List<dynamic>;
     // print(responseData);
     responseData.forEach((element) {
@@ -57,4 +66,70 @@ class DegreeProvider with ChangeNotifier { //provide get degree function but nee
       print(i.semesterAVG);
     }
   }
+
+  Future<void> getGradesPDF(List subjectsList) async {
+    // const trys = 'http://192.168.137.1:3001/transaction/addTransaction';
+    // final trans = await http.post(Uri.parse(trys),body: {
+    //   'username': '1111111111',
+    //   'date': '${DateTime.now()}',
+    //   'type': '',
+    //   'service':'تجديد قيد',
+    //   'price':'1999',
+    // });
+    // print('laaaaaaast ${trans.statusCode}');
+      openFile(url: 'http://10.0.2.2:3001/pdf/degreeSt?'
+          'username=${student!.id}'
+          '&name=${student!.name}'
+          '&collage=${student!.collage}'
+          '&department=${student!.department}'
+          '&level=${student!.level}'
+          '&GPA=${student!.gpa}'
+          '&degreeLevel=100%'
+          '&semestar=${student!.semester}'
+          '&semAvg=xxx'
+          '&semGrd=30'
+          '&sex=${student!.sex}'
+          '&nationality=${student!.nationality}'
+          '&POB=${student!.placeOfBirth}'
+          '&DOB=${student!.dateOfBirth}'
+          '&yearToJoin=${student!.yearOfRegister}'
+          '&gread=${student!.grade}'
+          '&subjects=${json.encode(subjectsList)}'
+        ,fileName: 'xx.pdf',
+      );
+
+  }
+
+  Future openFile({required String url, String? fileName}) async{
+    final file = await downloadFile(url, fileName!);
+    if (file == null) return;
+    print('Path: ${file.path}');
+    OpenFile.open(file.path);
+  }
+
+  Future<File?> downloadFile(String url, String name) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/$name');
+
+    try{
+      final response = await Dio().get(
+        url,
+        options: Options(
+          responseType: ResponseType.bytes,
+          followRedirects: false,
+          receiveTimeout: 0,
+        ),
+      );
+
+      final raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+      return file;
+    }
+    catch(error){
+      rethrow;
+    }
+
+  }
 }
+

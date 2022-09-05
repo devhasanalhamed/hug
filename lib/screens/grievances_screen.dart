@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../providers/dummy_data.dart';
 
 import '../models/appeal.dart';
+import '../providers/grievances.dart';
 
 class GrievancesScreen extends StatefulWidget {
   static String routeName = 'submit_appeal_screen';
@@ -23,6 +24,9 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
   late List<FinalDegreeModel> extractor;
   var _currentStep = 0;
   var _post = AppealPost('', true, '', AppealType.reSum);
+  var _subjectName ='';
+  var _grievanceType ='';
+  var _reason ='';
   List<AppealElement> appealElemetns = AppStructure().appealElements;
 
   @override
@@ -110,7 +114,7 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                                       setState(() {
                                         _currentStep += 1;
                                         print(validSubjects[index]['name']);
-                                        _post = AppealPost(validSubjects[index]['name'], true, '', AppealType.reSum);
+                                        _subjectName = validSubjects[index]['name'];
                                       });
                                     }, child: const Text('إختيار'))
                                   ],
@@ -135,7 +139,7 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                         setState(() {
                           _currentStep += 1;
                           print('appeal');
-                          _post = AppealPost(_post.name, true, '', AppealType.appeal);
+                          _grievanceType = 'فتح دفتر';
                         });
                       },
                       child: const Text('فتح دفتر'),
@@ -148,7 +152,7 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                         setState(() {
                           _currentStep += 1;
                           print('resum');
-                          _post = AppealPost(_post.name, true, '', AppealType.reSum);
+                          _grievanceType = 'جمع درجات';
                         });
                       },
                       child: const Text('جمع درجات'),
@@ -171,7 +175,7 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                   maxLines: 3,
                   maxLength: 200,
                   onChanged: (value){
-                    _post = AppealPost(_post.name, true, value, _post.type);
+                    _reason = value;
                   },
                 ),
                 // state: StepState.editing
@@ -202,6 +206,12 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                   }
                   if (_currentStep == 4) {
                     setState(() {
+                      Provider.of<GrievancesProvider>(context,listen: false).postGrievance(
+                        subject: _subjectName,
+                        degree: '',
+                        reason: _reason,
+                        type: _grievanceType,
+                      );
                       _currentStep = 0;
                     });
                   }

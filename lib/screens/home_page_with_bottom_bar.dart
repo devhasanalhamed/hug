@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/announcement.dart';
 import '../screens/settings_screen.dart';
 import '../screens/home_page.dart';
 import '../screens/news_screen.dart';

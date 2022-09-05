@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ElementaryButton extends StatelessWidget {
   final String _name;
-  final Function? _function;
+  final VoidCallback? _function;
   final Color? _color;
   const ElementaryButton(
       this._name,
@@ -15,7 +15,7 @@ class ElementaryButton extends StatelessWidget {
     final _screenSize = MediaQuery.of(context).size;
     return ElevatedButton(
       child: Text(_name),
-      onPressed:  () => _function,
+      onPressed:  _function,
       style: ElevatedButton.styleFrom(
           primary: _color,
           fixedSize:

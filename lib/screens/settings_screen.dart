@@ -1,4 +1,6 @@
 import 'package:dgfhuss/models/student_information.dart';
+import 'package:dgfhuss/providers/grievances.dart';
+import 'package:dgfhuss/providers/suggestions.dart';
 import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import '../providers/degree.dart';
+import '../providers/schedule.dart';
 
 class SettingsScreen extends StatefulWidget {
   static String routeName = 'contact_screen';
@@ -113,6 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children:[
                       ListTile(
                         onTap: (){
+                          Provider.of<ScheduleProvider>(context,listen: false).getSchedule();
                         },
                         title: const Text('تعديل البيانات'),
                         leading: Container(
@@ -132,6 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       ListTile(
                         onTap: (){
+                          Provider.of<SuggestionsProvider>(context,listen: false).postSuggestions();
                         },
                         title: const Text('الشكاوي والإقتراحات'),
                         leading: Container(

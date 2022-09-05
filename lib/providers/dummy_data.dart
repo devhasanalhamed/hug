@@ -7,7 +7,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import 'package:intl/intl.dart';
 
-import '../models/advertise.dart';
+import '../models/announcement_model.dart';
 import '../models/appeal.dart';
 import '../screens/news_screen.dart';
 import '../screens/electronic_services_screen.dart';
@@ -17,7 +17,7 @@ import '../screens/settings_screen.dart';
 import '../screens/manual_screen.dart';
 import '../screens/grievances_screen.dart';
 import '../screens/renew_register_screen.dart';
-import '../screens/university_calender_screen.dart';
+import '../screens/calender_screen.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/notification_screen.dart';
 
@@ -25,7 +25,7 @@ import '../models/drawer_list_tile.dart';
 import '../models/home_page_element.dart';
 import '../models/news.dart';
 import '../models/degree_model.dart';
-import '../models/university_calendar.dart';
+import '../models/calendar.dart';
 
 class AppStructure {
   List<DrawerListTileStructure> drawerElements = [
@@ -121,29 +121,22 @@ class AppStructure {
 
   List<NewsModel> newsElement = [
     NewsModel(
-        title: 'تدشين تطبيق جامعة حضرموت',
-        content: 'قام الطلاب الأربعة هاله بن هلابي، مرعي بن طالب، عبد الرحمن بهيان، و حسن الحامد بإطلاق التطبيق الرسمي لجامعة حضرموت تحت إشراف الدكتورة القديرة سهام بامطرف وقد أشاد عميد الكلية بكلمة تخللها الشكر والثناء على من لقبهم ب فخر جامعة حضرموت والنموذج المثالي للطالب الحضرمي.',
-        imageLink: 'assets/images/news1.jpg',
+        title: 'برعاية فخامة رئيس الجمهورية: جامعة حضرموت تحتفي بتكريم أوائل الخريجين والحائزين على مرتبة الشرف من مختلف كليات الجامعة للعام الجامعي 2020 – 2021 م',
+        content: 'نظمت جامعة حضرموت بقاعة الفقيد علي هود باعباد بديوان رئاسة الجامعة حفل التخرج السنوي لتكريم أوائل الخريجين والحائزين على مرتبة الشرف في جميع التخصصات بكليات الجامعة المختلفة، وذلك برعاية كريمة من فخامة الأخ المشير عبدربه منصور هادي رئيس الجمهورية.',
+        imageLink: 'assets/images/new1.jpg',
       publishDate: DateTime.now(),
     ),
     NewsModel(
-      title: 'دورة بعنوان: المعمل والإجراء',
-      content: "برعاية الأستاذ الدكتور/ محمد سعيد خنبش رئيس جامعة حضرموت، والعميد/ سعيد بن دويس العوبثاني مدير أمن ساحل حضرموت، وفي ضمن برنامج (شراع)؛ أقام المنتدى السياسي لطلاب جامعة حضرموت الحقيبة التدريبية بعنوان: المعمل والإجراء الجنائي، بالشراكة مع إدارة التوجيه المعنوي والعلاقات العامة، صباح اليوم الاثنين بقاعة الفقيد اللواء/ سعيد أحمد المحمدي، والتي تستمر لمدة أربعة أيام من 21_24 فبراير.",
-      imageLink: 'assets/images/news4.jpg',
+      title: 'برئاسة رئيس الجامعة: اجتماع رؤساء لجان أسبوع البحث العلمي الثاني',
+      content: "عقدت اللجنة العليا لأسبوع البحث العلمي الثاني بجامعة حضرموت صباح اليوم اجتماعها الثالث برئاسة الأستاذ الدكتور محمد سعيد خنبش رئيس الجامعة، وبحضور نواب رئيس الجامعة، ورؤساء اللجان الخاصة. ناقش الاجتماع الاستعدادات النهائية لانطلاق فعاليات أسبوع البحث العلمي الثاني بجامعة حضرموت الثلاثاء المقبل 15مارس بحفل الافتتاح الذي بحضور السلطة المحلية بحضرموت وعدد من قيادات الجامعة وعمداء الكليات ونوابهم وروساء الأقسام العلمية ورؤساء المراكز العلمية والباحثين والطلاب.",
+      imageLink: 'assets/images/new2.jpg',
       publishDate: DateTime.now(),
     ),
 
     NewsModel(
-      title: 'اجتماع رؤساء لجان أسبوع البحث العلمي',
-      content: 'عقدت اللجنة العليا لأسبوع البحث العلمي الثاني بجامعة حضرموت صباح اليوم اجتماعها الثاني برئاسة الأستاذ الدكتور محمد سعيد خنبش رئيس الجامعة، وبحضور نواب رئيس الجامعة، ورؤساء اللجان الخاصة.',
-      imageLink: 'assets/images/news3.jpg',
-      publishDate: DateTime.now(),
-
-    ),
-    NewsModel(
-      title: 'اللجنة تعقد إجتماعا دوريا',
-      content: 'عقدت لجنة الخطة الإستراتيجية الثانية لجامعة حضرموت اجتماعًا دوريًّا برئاسة الأستاذ الدكتور محمد سعيد خنبش رئيس الجامعة، صباح الثلاثاء الأول من مارس ٢٠٢٢، استعرض الاجتماع نتائج اللجان المختصة بالقطاعات المختلفة في الجامعة، وقدَّم رؤساء القطاعات عرضًا لما توصلت إليه اللجان في نقاشاتها التي تمخضت عن بلورة الأهداف وتحويلها إلى مصفوفة برامج ومشاريع تكون مسودة نهائية لرسم إستراتيجية الجامعة ٢٠٣٠.',
-      imageLink: 'assets/images/news2.jpg',
+      title: 'نحو شراكة فاعلة بين الجامعتين: لقاء مهم عبر تقنية الزوم بين رئيس جامعة حضرموت ونائب رئيس جامعة بتروناس تكنولوجي الماليزية',
+      content: 'ترأس الأستاذ الدكتور محمد سعيد خنبش رئيس جامعة حضرموت صباح هذا اليوم الموافق ٨ مارس العام ٢٠٢٢م، والأستاذ الدكتور إبراهيم عبدالمطلب نائب رئيس جامعة بتروناس تكنولوجي الماليزية، اللقاء المهم والجامع لأعمال اللجان المشتركة بين الجامعتين، عبر تقنية الزوم. وقد تمخض اللقاء عن جُملة من البنود والتوصيات تنفيذًا للاتفاقية المبرمة بين الجامعتين.',
+      imageLink: 'assets/images/new3.jpg',
       publishDate: DateTime.now(),
 
     ),
@@ -224,25 +217,7 @@ class AppStructure {
     ),
   ];
 
-  List<UniversityCalendarElement> universityCalendar= [
-    UniversityCalendarElement('إستنئاف الفصل الدراسي الأول', DateTime.utc(2022,1,15), Semester.first),
-    UniversityCalendarElement('إنتهاء الفصل الدراسي الأول', DateTime.utc(2022,3,17), Semester.first),
-    UniversityCalendarElement('إختبارات الفصل الدراسي الأول', DateTime.utc(2022,3,31), Semester.first),
-  ];
-  
-  List<ScheduleElement> scheduleElements = [
-    ScheduleElement('Artificial Intelligent', 'د. رشا بن ثعلب', 8,'ص', 10,'ص', 'D203', Days.sunday),
-    ScheduleElement('Computer Network', 'د. مكارم بامطرف', 10,'ص', 12,'م', 'D203', Days.sunday),
-    ScheduleElement('VLSI Circuit Design Lab', 'أ. وفاء', 8,'ص', 10,'ص', 'D204', Days.monday),
-    ScheduleElement('Artificial Intelligent Lab', 'م. عصمت', 10,'ص', 12,'م', 'B202', Days.monday),
-    ScheduleElement('Data Security Lab', 'أ. فاطمة بافرج', 12,'م', 2,'م', 'A204', Days.monday),
-    ScheduleElement('Data Security', 'د. مكارم بامطرف', 10,'ص', 12,'م', 'C202', Days.thursday),
-    ScheduleElement('VLSI Circuit Design', 'د. خالد فوزي', 12,'م', 2,'م', 'C203', Days.thursday),
-  ];
 
-  List<Advertise> addsList = [
-    Advertise('يوم المهندس!', 'تقام فعاليات عيد المهندس اليوم !!')
-  ];
 
   List<AppealElement> appealElements = [
     AppealElement('Computer Graphics', AppealType.reSum),

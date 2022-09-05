@@ -1,6 +1,10 @@
 // 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
+import 'package:dgfhuss/providers/announcement.dart';
+import 'package:dgfhuss/providers/calendar.dart';
 import 'package:dgfhuss/providers/degree.dart';
 import 'package:dgfhuss/providers/grievances.dart';
+import 'package:dgfhuss/providers/schedule.dart';
+import 'package:dgfhuss/providers/suggestions.dart';
 import 'package:flutter/material.dart'; //package that provide widgets (Google)
 import 'package:flutter/services.dart';
 
@@ -18,7 +22,7 @@ import './screens/manual_screen.dart';
 import './screens/profile_screen.dart';
 import './screens/grievances_screen.dart';
 import './screens/renew_register_screen.dart';
-import './screens/university_calender_screen.dart';
+import './screens/calender_screen.dart';
 import './screens/schedule_screen.dart';
 import './screens/notification_screen.dart';
 import './screens/news_viewer.dart';
@@ -44,13 +48,27 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => NewsProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => CalendarProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => SuggestionsProvider(),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider,AnnouncementProvider>(
+          create: (ctx) => AnnouncementProvider(student: null),
+          update: (ctx, auth, announcement) => AnnouncementProvider(student: auth.student),
+        ),
         ChangeNotifierProxyProvider<AuthProvider,DegreeProvider>(
-          create: (ctx) => DegreeProvider(name: '',id: ''),
-          update: (ctx, auth, degree) => DegreeProvider(id: auth.student.id.toString(), name: auth.student.name),
+          create: (ctx) => DegreeProvider(name: '',id: '',student: null),
+          update: (ctx, auth, degree) => DegreeProvider(id: auth.student.id.toString(), name: auth.student.name,student: auth.student),
         ),
         ChangeNotifierProxyProvider<AuthProvider,GrievancesProvider>(
           create: (ctx) => GrievancesProvider(studentCopy: null),
           update: (ctx, auth, grievance) => GrievancesProvider(studentCopy: auth.student),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider,ScheduleProvider>(
+          create: (ctx) => ScheduleProvider(studentCopy: null),
+          update: (ctx, auth, schedule) => ScheduleProvider(studentCopy: auth.student),
         ),
       ],
       child: Consumer<AuthProvider>(
@@ -107,6 +125,7 @@ class MyApp extends StatelessWidget {
         // ),
         // scaffoldBackgroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
           home: auth.isAuth? const HomePageWithBottomBar():const LogInScreen(),
+          // auth.isAuth? const HomePageWithBottomBar():const LogInScreen()
       routes: {
         ProfileScreen.routeName : (ctx) => const ProfileScreen(),
         NewsScreen.routeName : (ctx) => const NewsScreen(),

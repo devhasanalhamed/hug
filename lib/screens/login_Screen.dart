@@ -1,3 +1,4 @@
+import 'package:dgfhuss/providers/announcement.dart';
 import 'package:dgfhuss/widgets/buttons/elementary_button.dart';
 import 'package:flutter/material.dart';
 
@@ -22,16 +23,21 @@ class _LogInScreenState extends State<LogInScreen> {
   var _showPassword = false;
   var _rememberMe = false;
   var _savedName = '';
+  var thereIsData = false;
 
   @override
   void initState() {
     print('initState');
     Provider.of<AuthProvider>(context,listen: false).getSavedData().then((_){
-      setState(() {
-        _rememberMe = Provider.of<AuthProvider>(context,listen: false).rememberMe;
-        _savedName = Provider.of<AuthProvider>(context,listen: false).savedName;
-        _userName = Provider.of<AuthProvider>(context,listen: false).id;
-      });
+      if (Provider.of<AuthProvider>(context,listen: false).id.length == 11){
+        setState(() {
+          _rememberMe = Provider.of<AuthProvider>(context,listen: false).rememberMe;
+          _savedName = Provider.of<AuthProvider>(context,listen: false).savedName;
+          _userName = Provider.of<AuthProvider>(context,listen: false).id;
+          thereIsData = true;
+          Provider.of<AuthProvider>(context,listen: false).trySignWithFingerprint();
+        });
+      }
     });
     super.initState();
   }
@@ -43,7 +49,6 @@ class _LogInScreenState extends State<LogInScreen> {
   void _onSave(){
     _formKey.currentState!.save();
     Provider.of<AuthProvider>(context, listen: false).authLogin(_userName, _password, _rememberMe);
-    Provider.of<NewsProvider>(context, listen: false).getNews();
   }
 
     return Scaffold(
@@ -91,7 +96,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                   child: ListView(
                     children: [
-                      if(_userName.isEmpty)TextFormField(
+                      if(!thereIsData)TextFormField(
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -230,11 +235,11 @@ class _LogInScreenState extends State<LogInScreen> {
                       //   child: const Text('تسجيل الدخول'),
                       // ),
                       ElementaryButton('تسجيل الدخول',_onSave,null),
-                      if(_userName.isNotEmpty)TextButton(
+                      if(thereIsData)TextButton(
                         child: const Text('تسجيل مستخدم آخر'),
                         onPressed: (){
                           setState(() {
-                            _userName = '';
+                            thereIsData = false;
                           });
                         },
                       ),

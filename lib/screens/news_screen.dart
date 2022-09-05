@@ -16,14 +16,13 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  final _list = AppStructure().newsElement;
   @override
   Widget build(BuildContext context) {
-    final news = Provider.of<NewsProvider>(context).newsList;
+    final news = AppStructure().newsElement;
     return Scaffold(
       appBar: const MyAppBar(pageTitle: 'الأخبار'),
       body: ListView.builder(
-        itemCount: _list.length,
+        itemCount: news.length,
         itemBuilder: (ctx, i) {
           return Padding(
             padding: const EdgeInsets.symmetric(
@@ -55,12 +54,12 @@ class _NewsScreenState extends State<NewsScreen> {
                         borderRadius: const BorderRadius.all(
                           Radius.circular(20.0),
                         ),
-                        child: Image.network(
+                        child: Image.asset(
                           news[i].imageLink,
                           height: 150,
                           width: double.infinity,
                           fit: BoxFit.cover,
-                          errorBuilder: (ctx, url, error) => Center(child: Text('error while loading picture')),
+                          errorBuilder: (ctx, url, error) => const Center(child: Text('error while loading picture')),
                         ),
                       ),
                       ClipRRect(
@@ -79,7 +78,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      _list[i].title,
+                                      news[i].title,
                                       textAlign: TextAlign.right,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -93,7 +92,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 height: 70,
                               ),
                               Text(
-                                _list[i].content,
+                                news[i].content,
                                 textAlign: TextAlign.right,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

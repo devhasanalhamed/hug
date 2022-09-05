@@ -27,9 +27,11 @@ class _GradesScreenState extends State<GradesScreen> {
   int _semesterHandler = 1;
   late Future getDegrees;
   void selectSemester(val) {
-    setState(() {
-      _semesterHandler = val;
-    });
+    if (val < Provider.of<DegreeProvider>(context,listen: false).listOfDegrees.length){
+      setState(() {
+        _semesterHandler = val;
+      });
+    }
   }
 
   FinalDegreeModel? get currentDegree {
@@ -111,7 +113,18 @@ class _GradesScreenState extends State<GradesScreen> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: _screenSize.width *0.08),
-                    child: const ElementaryButton('طلب البيان', null, null),
+                    child: ElementaryButton(
+                      'طلب البيان',
+                          (){
+                        Provider.of<DegreeProvider>(context,listen: false).getGradesPDF(currentDegree!.subjects);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('pdf will download soon, wait.'),
+                          )
+                        );
+                        },
+                      null,
+                    ),
                   ),
                   SizedBox(
                     height: 100,
