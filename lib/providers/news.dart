@@ -16,7 +16,7 @@ class NewsProvider with ChangeNotifier{
     return[..._newsList];
 }
   Future<void> getNews() async {
-    const url = 'http://10.0.2.2:3001/news';
+    const url = 'http://192.168.137.1:3001/news';
     try{
       final response = await http.get(Uri.parse(url));
       final responseData = json.decode(response.body) as List<dynamic>;

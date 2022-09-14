@@ -194,6 +194,7 @@ class _DigitalCardScreenState extends State<DigitalCardScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(8))
                       ),
                       height: 100,
                       width: 80,

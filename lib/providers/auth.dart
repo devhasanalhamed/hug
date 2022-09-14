@@ -1,8 +1,15 @@
+import 'dart:io';
+
+import 'package:dgfhuss/models/http_exception.dart';
+import 'package:dgfhuss/providers/transactions.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart'; //this file is to provide auth(student) data to sign in and to the application
 import 'package:flutter/services.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -42,6 +49,7 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
     return _student;
   }
 
+
   bool get isAuth{ //a simple method to check if it's auth to move to the next screen or not
     // _student.state == true &&
     if(_student.name.isNotEmpty){
@@ -50,14 +58,12 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
     return false;
   }
 
+
   Future<void> getSavedData() async { //get data, if there are saved data from previous login
     final prefs = await SharedPreferences.getInstance();
     final _rememberMe = prefs.getBool('rememberMe'); //remember me data
-    // print('get data: $_rememberMe');
     final _savedName = prefs.getString('student'); //user data
-    // print('get data: $_savedName');
     final _id = prefs.getString('id'); //user data
-    // print('get data: $_id');
     final _fingerprint = prefs.getString('password');
     if (_rememberMe != null){
       rememberMe = _rememberMe;
@@ -87,11 +93,16 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
     prefs.remove('rememberMe');
     prefs.remove('student');
     prefs.remove('id');
+    prefs.remove('password');
+    rememberMe = false;
+    savedName = '';
+    id = '';
+    fingerprint = '';
     notifyListeners();
   }
 
   Future<void> authLogin(userName, password, rememberMe) async{ //a function to login and get student data from the server
-    const url ='http://10.0.2.2:3001/studentLogin';
+    const url ='http://192.168.137.1:3001/studentLogin';
     try {
       final response = await http.post(Uri.parse(url),body: {
         'username': userName,
@@ -130,22 +141,25 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
           prefs.setString('id', '${responseData['username']}');
           prefs.setString('password', password);
         }
-        if (rememberMe == false){
-          prefs.remove('rememberMe');
-          prefs.remove('student');
-          prefs.remove('id');
-          prefs.remove('password');
-        }
+        // if (!rememberMe){
+        //   prefs.remove('rememberMe');
+        //   prefs.remove('student');
+        //   prefs.remove('id');
+        //   prefs.remove('`password`');
+        // }
         notifyListeners();
+      }
+      else{
+        throw HttpException('');
       }
     }
     catch(error){
-      print(error);
+      print('error');
       rethrow;
     }
   }
 
-  void logout(){
+  Future<void> logout() async{
     _student = Student(
       name: '',
       id: 0,
@@ -169,6 +183,9 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
       grade: '',
       dateOfBirth: DateTime.now(),
     );
+    final prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('student'));
+
     notifyListeners();
   }
   static final _authFingerprint = LocalAuthentication();
@@ -202,21 +219,36 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
 
   }
 
+
+  Future<void> updateWallet() async{
+    try{
+      print('student id from upd: ${_student.id}');
+      print(_student.wallet);
+      final  url = 'http://192.168.137.1:3001/updateUser?username=${_student.id}';
+      final response = await http.get(Uri.parse(url));
+      final studentUpdate = json.decode(response.body);
+      _student.wallet = studentUpdate['wallet'];
+      print(_student.wallet);
+    }
+    catch(error){
+      print('update wallet error $error');
+    }
+  }
+
   Future<void> renewState() async {
     const  url = 'http://192.168.137.1:3001/updateUserState';
     try{
-      final response = await http.patch(Uri.parse(url),body: {
-        'username':'11111111111',
-        'state':'true',
-        'wallet':'19999',
-      });
-      print(response.statusCode);
-      final  anotherUrl = 'http://10.0.2.2:3001/updateUser?username=${_student.id}';
-      final anotherResponse = await http.get(Uri.parse(anotherUrl));
-      final studentUpdate = json.decode(anotherResponse.body);
-      _student.state = studentUpdate['state'];
-
-
+            final response = await http.patch(Uri.parse(url),body: {
+              'username':'${student.id}',
+              'state':'true',
+              'wallet':'${_student.wallet - 5000}',
+            });
+            print(response.statusCode);
+            print('student id from ren: ${_student.id}');
+            final  anotherUrl = 'http://192.168.137.1:3001/updateUser?username=${_student.id}';
+            final anotherResponse = await http.get(Uri.parse(anotherUrl));
+            final studentUpdate = json.decode(anotherResponse.body);
+            _student.state = studentUpdate['state'];
     }
     catch(error){
       rethrow;
@@ -225,21 +257,84 @@ class AuthProvider with ChangeNotifier{ // a class with a Notifier to update the
   }
 
   Future<void> getPDF() async {
-    final  url = 'http://10.0.2.2:3001/pdf/regCir?'
-        'username=${student.id}'
-        '&name=${student.name}'
-        '&collage=${student.collage}'
-        '&department=${student.department}'
-        '&level=${student.level}'
-        '&typeOfRegister=${student.typeOfRegister}'
-        '&date=${DateTime.now()}';
+    TransactionsProvider().newTransaction(
+      student.id,
+      'شهادة قيد',
+      500,
+    ).then(
+        (_){
+          openFile(
+              url: 'http://192.168.137.1:3001/pdf/regCir?'
+                  'username=${student.id}'
+                  '&name=${student.name}'
+                  '&collage=${student.collage}'
+                  '&department=${student.department}'
+                  '&level=${student.level}'
+                  '&typeOfRegister=${student.typeOfRegister}'
+                  '&date=${DateTime.now()}',
+              fileName: 'pdf.pdf'
+          );
+        }
+    );
+  }
+
+
+  Future openFile({required String url, String? fileName}) async{
+    final file = await downloadFile(url, fileName!);
+    if (file == null) return;
+    print('Path: ${file.path}');
+    OpenFile.open(file.path);
+  }
+
+  Future<File?> downloadFile(String url, String name) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/$name');
+
     try{
-      final response = await http.get(Uri.parse(url));
-      print(response.body);
+      final response = await Dio().get(
+        url,
+        options: Options(
+          responseType: ResponseType.bytes,
+          followRedirects: false,
+          receiveTimeout: 0,
+        ),
+      );
+
+      final raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+      return file;
     }
     catch(error){
       rethrow;
     }
+
   }
 
+  Future<void> changePassword(String oldPassword,String newPassword) async {
+    try{
+      final checkUrl = 'http://192.168.137.1:3001/checkOldPassword?username=${_student.id}&password=$oldPassword';
+      final response = await http.get(Uri.parse(checkUrl));
+      print(response.statusCode);
+      if(response.statusCode == 200){
+        const url = 'http://192.168.137.1:3001/changePassword';
+        final anotherResponse = http.patch(Uri.parse(url),body: {
+          'username':'${_student.id}',
+          'password': newPassword,
+        });
+      }
+    }
+    catch(error){
+
+    }
+  }
+
+  Future<void> forgotMyPassword(String id,String email) async{
+    const url = 'http://192.168.137.1:3001/sendForgetPass';
+    final response = await http.post(Uri.parse(url),body: {
+      'username': id,
+      'email': email,
+    });
+    print(response.statusCode);
+  }
 }

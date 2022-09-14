@@ -1,6 +1,7 @@
 import 'package:dgfhuss/providers/auth.dart';
 import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
 import 'package:dgfhuss/widgets/buttons/elementary_button.dart';
+import 'package:dgfhuss/widgets/confirm_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -89,7 +90,28 @@ class _RenewRegisterScreenState extends State<RenewRegisterScreen> {
             ),
             ElementaryButton(
                 'طلب تجديد',
-              _studentState?null:() =>Provider.of<AuthProvider>(context,listen: false).renewState(),
+              _studentState?null:(){
+                if(_student.wallet<5000){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('رصيدك غير كافي'),
+                    ),
+                  );
+                }
+                else{
+                  showDialog(
+                    context: (context),
+                    builder: (ctx) => ConfirmWidget(
+                            (){
+                          Provider.of<AuthProvider>(context,listen: false).renewState();
+                          Navigator.pop(context);
+                        },
+                        5000,
+                        'تجديد القيد'
+                    ),
+                  );
+                }
+              },
               _studentState?Colors.grey:Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(
@@ -97,7 +119,37 @@ class _RenewRegisterScreenState extends State<RenewRegisterScreen> {
             ),
             ElementaryButton(
                 'طلب شهادة تسجيل قيد',
-              _studentState?(){}:null,
+              _studentState?(){
+                if(_student.wallet<500){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('رصيدك غير كافي'),
+                    ),
+                  );
+                }
+                else{
+                  showDialog(
+                    context: (context),
+                    builder: (ctx) => ConfirmWidget(
+                            (){
+                          Provider.of<AuthProvider>(context,listen: false).getPDF().then(
+                                  (_){
+                                Provider.of<AuthProvider>(context,listen: false).updateWallet();
+                              }
+                          );
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('جاري تنزيل الملف'),
+                            ),
+                          );
+                        },
+                        500,
+                        'شهادة القيد'
+                    ),
+                  );
+                }
+              }:null,
               _studentState?Theme.of(context).colorScheme.primary:Colors.grey,
             ),
             // ElevatedButton(

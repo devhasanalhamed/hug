@@ -1,13 +1,13 @@
 import 'package:dgfhuss/models/degree_model.dart';
 import 'package:dgfhuss/providers/degree.dart';
 import 'package:dgfhuss/widgets/appbar/my_appbar.dart';
+import 'package:dgfhuss/widgets/confirm_widget.dart';
 import 'package:dgfhuss/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import '../providers/dummy_data.dart';
 
-import '../models/appeal.dart';
+import '../providers/auth.dart';
 import '../providers/grievances.dart';
 
 class GrievancesScreen extends StatefulWidget {
@@ -23,11 +23,9 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
   late Future getSubjects;
   late List<FinalDegreeModel> extractor;
   var _currentStep = 0;
-  var _post = AppealPost('', true, '', AppealType.reSum);
   var _subjectName ='';
   var _grievanceType ='';
-  var _reason ='';
-  List<AppealElement> appealElemetns = AppStructure().appealElements;
+  var _reason ='لا يوجد ملاحظات';
 
   @override
   void initState() {
@@ -40,9 +38,23 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
   List<dynamic> get validSubjects{
     return extractor.last.subjects;
   }
+
+  bool get acceptable {
+    var subjectsLength = validSubjects.length;
+    var countTest = 0;
+    for(int i = 0; i < subjectsLength; i ++){
+      if(validSubjects[i]['grade'] == 'ممتاز' || validSubjects[i]['grade'] == 'جيد جدًا'){
+        countTest ++;
+      }
+    }
+    if (subjectsLength-1 == countTest){
+      return true;
+    }
+    return false;
+  }
   @override
   Widget build(BuildContext context) {
-
+    final studentWallet = Provider.of<AuthProvider>(context,listen: false).student.wallet;
     return Scaffold(
       appBar: const MyAppBar(pageTitle: 'طلب تظلم'),
       body: FutureBuilder(
@@ -112,8 +124,8 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                                     ),
                                     ElevatedButton(onPressed: (){
                                       setState(() {
+                                        print(acceptable);
                                         _currentStep += 1;
-                                        print(validSubjects[index]['name']);
                                         _subjectName = validSubjects[index]['name'];
                                       });
                                     }, child: const Text('إختيار'))
@@ -135,13 +147,12 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                 content: Row(
                   children: [
                     ElevatedButton(
-                      onPressed: (){
+                      onPressed: acceptable?(){
                         setState(() {
                           _currentStep += 1;
-                          print('appeal');
                           _grievanceType = 'فتح دفتر';
                         });
-                      },
+                      }:null,
                       child: const Text('فتح دفتر'),
                     ),
                     const SizedBox(
@@ -151,7 +162,6 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                       onPressed: (){
                         setState(() {
                           _currentStep += 1;
-                          print('resum');
                           _grievanceType = 'جمع درجات';
                         });
                       },
@@ -165,12 +175,14 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                 state: _currentStep >= 3? StepState.complete :StepState.indexed,
                 title: const Text('الملاحظات'),
                 content: TextFormField(
+                  key: UniqueKey(),
                   style: const TextStyle(
                       fontSize: 16,
                       color: Colors.black
                   ),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: _reason,
                   ),
                   maxLines: 3,
                   maxLength: 200,
@@ -184,13 +196,38 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                 isActive: _currentStep >= 3,
                 state: _currentStep >= 4? StepState.complete :StepState.indexed,
                 title: const Text('التأكيد'),
-                content: Column(
-                  children: [
-                    Text(_post.name),
-                    Text(_post.content),
-                    Text(_post.type.toString()),
-                    Text(_post.isValid.toString()),
-                  ],
+                content: SizedBox(
+                  height: 150,
+                  width: 300,
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _subjectName,
+                              ),
+                              Text(
+                                _grievanceType,
+                              ),
+                            ],
+                          ),
+                          Container(
+                            width: double.infinity,
+                            height: 100,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              _reason,
+                            ),
+                            color: Colors.black26,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ];
@@ -205,15 +242,46 @@ class _GrievancesScreenState extends State<GrievancesScreen> {
                     });
                   }
                   if (_currentStep == 4) {
-                    setState(() {
-                      Provider.of<GrievancesProvider>(context,listen: false).postGrievance(
-                        subject: _subjectName,
-                        degree: '',
-                        reason: _reason,
-                        type: _grievanceType,
+                    var cost = _grievanceType == 'جمع درجات'?500:1500;
+                    if(studentWallet<cost){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('رصيدك غير كافي'),
+                        ),
                       );
-                      _currentStep = 0;
-                    });
+                    }
+                    else{
+                      showDialog(
+                          context: context,
+                          builder: (ctx) => ConfirmWidget(
+                                  (){
+                                Provider.of<GrievancesProvider>(context,listen: false).postGrievance(
+                                  subject: _subjectName,
+                                  type: _grievanceType,
+                                  reason: _reason,
+                                  degree: _subjectName,
+                                  cost: _grievanceType == 'جمع درجات'?500:1500,
+                                ).then(
+                                        (_){
+                                      Provider.of<AuthProvider>(context,listen: false).updateWallet();
+                                    }
+                                );
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('تم رفع الطلب بنجاح'),
+                                  ),
+                                );
+                                _subjectName ='';
+                                _grievanceType ='';
+                                _reason ='لا يوجد ملاحظات';
+                              },
+                              _grievanceType == 'جمع درجات'?500:1500,
+                              _grievanceType
+                          )
+                      );
+                    }
+                    _currentStep = 0;
                   }
                   else {
                     null;

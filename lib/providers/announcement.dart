@@ -22,28 +22,25 @@ class AnnouncementProvider extends ChangeNotifier {
   List<String> receivedElements = [];
 
   Future<void> getAnnouncement() async {
-    const  url = 'http://10.0.2.2:3001/ads';
+    _announcementList.clear();
+    const  url = 'http://192.168.137.1:3001/ads';
     try{
       final response = await http.get(Uri.parse(url),);
       final responseData = json.decode(response.body) as List<dynamic>;
       responseData.forEach((element) {
-        if (receivedElements.contains(element['_id'])){
-          print('already there');
-          return;
-        }
         receivedElements.add(element['_id']);
         _announcementList.add(
           Announcement(
             id: element['_id'],
             title: element['title'],
-            date: DateTime.parse(element['dateNo']),
+            date: DateTime.parse(element['date']),
             isNew: false,
           ),
         );
       });
     }
     catch(error){
-      print('announcement : $error');
+      print('announcement : 511');
       rethrow;
     }
     // notifyListeners();
@@ -52,9 +49,6 @@ class AnnouncementProvider extends ChangeNotifier {
   void getPersonalAnnouncement(){
     final list = student!.notification;
     for (var element in list) {
-      if (receivedElements.contains('${element['id']}')){
-        print('personal announcement already there');
-      }
       receivedElements.add('${element['id']}');
       _announcementList.insert(0, Announcement(
         id: '${element['id']}',

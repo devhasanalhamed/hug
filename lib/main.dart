@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart'; //package to manage state of data (Google)
 import './providers/auth.dart';
 import './providers/news.dart';
+import './providers/transactions.dart';
 
 import './screens/home_page_with_bottom_bar.dart';
 import './screens/login_Screen.dart';
@@ -53,6 +54,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => SuggestionsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => TransactionsProvider(),
         ),
         ChangeNotifierProxyProvider<AuthProvider,AnnouncementProvider>(
           create: (ctx) => AnnouncementProvider(student: null),

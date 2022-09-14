@@ -56,15 +56,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ),
                 ],
               ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: IconButton(
-                  onPressed: (){
-                  },
-                  icon: const Icon(Icons.close),
-                ),
-              ),
+              // Positioned(
+              //   top: 0,
+              //   right: 0,
+              //   child: IconButton(
+              //     onPressed: (){
+              //     },
+              //     icon: const Icon(Icons.close),
+              //   ),
+              // ),
             ],
           ),
         ),

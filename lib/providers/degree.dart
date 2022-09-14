@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dgfhuss/providers/transactions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class DegreeProvider with ChangeNotifier { //provide get degree function but nee
 
   final List<DegreeModel> _fetchedDegrees = [];
 
+
   List<FinalDegreeModel> get listOfDegrees{
    return _listOfDegrees;
   }
@@ -28,7 +30,9 @@ class DegreeProvider with ChangeNotifier { //provide get degree function but nee
   final List<FinalDegreeModel> _listOfDegrees = [];
 
   Future<void> getDegree() async {
-    final url = 'http://10.0.2.2:3001/degree?name=$name&username=$id'; //assertion query into url
+    _fetchedDegrees.clear();
+    _listOfDegrees.clear();
+    final url = 'http://192.168.137.1:3001/degree?name=$name&username=$id'; //assertion query into url
     final response = await http.get(Uri.parse(url));
     print(response.statusCode);
     final responseData = json.decode(response.body) as List<dynamic>;
@@ -68,36 +72,30 @@ class DegreeProvider with ChangeNotifier { //provide get degree function but nee
   }
 
   Future<void> getGradesPDF(List subjectsList) async {
-    // const trys = 'http://192.168.137.1:3001/transaction/addTransaction';
-    // final trans = await http.post(Uri.parse(trys),body: {
-    //   'username': '1111111111',
-    //   'date': '${DateTime.now()}',
-    //   'type': '',
-    //   'service':'تجديد قيد',
-    //   'price':'1999',
-    // });
-    // print('laaaaaaast ${trans.statusCode}');
-      openFile(url: 'http://10.0.2.2:3001/pdf/degreeSt?'
-          'username=${student!.id}'
-          '&name=${student!.name}'
-          '&collage=${student!.collage}'
-          '&department=${student!.department}'
-          '&level=${student!.level}'
-          '&GPA=${student!.gpa}'
-          '&degreeLevel=100%'
-          '&semestar=${student!.semester}'
-          '&semAvg=xxx'
-          '&semGrd=30'
-          '&sex=${student!.sex}'
-          '&nationality=${student!.nationality}'
-          '&POB=${student!.placeOfBirth}'
-          '&DOB=${student!.dateOfBirth}'
-          '&yearToJoin=${student!.yearOfRegister}'
-          '&gread=${student!.grade}'
-          '&subjects=${json.encode(subjectsList)}'
-        ,fileName: 'xx.pdf',
-      );
-
+    TransactionsProvider().newTransaction(student!.id, 'بيان درجات', 200).then(
+        (_){
+          openFile(url: 'http://192.168.137.1:3001/pdf/degreeSt?'
+              'username=${student!.id}'
+              '&name=${student!.name}'
+              '&collage=${student!.collage}'
+              '&department=${student!.department}'
+              '&level=${student!.level}'
+              '&GPA=${student!.gpa}'
+              '&degreeLevel=100%'
+              '&semestar=${student!.semester}'
+              '&semAvg=xxx'
+              '&semGrd=30'
+              '&sex=${student!.sex}'
+              '&nationality=${student!.nationality}'
+              '&POB=${student!.placeOfBirth}'
+              '&DOB=${student!.dateOfBirth}'
+              '&yearToJoin=${student!.yearOfRegister}'
+              '&gread=${student!.grade}'
+              '&subjects=${json.encode(subjectsList)}'
+            ,fileName: 'grades.pdf',
+          );
+        }
+    );
   }
 
   Future openFile({required String url, String? fileName}) async{

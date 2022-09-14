@@ -20,7 +20,7 @@ class CalendarProvider with ChangeNotifier {
 
   Future<void> getCalendar() async {
     try{
-      const  url = 'http://10.0.2.2:3001/calander/last';
+      const  url = 'http://192.168.137.1:3001/calander/last';
       final response = await http.get(Uri.parse(url));
       final responseData = json.decode(response.body) as Map<String,dynamic>;
       if(_calendar.isEmpty){

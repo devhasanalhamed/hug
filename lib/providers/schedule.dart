@@ -14,7 +14,7 @@ class ScheduleProvider with ChangeNotifier {
   
   Future<void> getSchedule() async {
     try{
-      final url = 'http://10.0.2.2:3001/schedule/'
+      final url = 'http://192.168.137.1:3001/schedule/'
           '${studentCopy!.department}'
           '/${studentCopy!.level}'
           '/${studentCopy!.semester}'

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:intl/intl.dart' as format;
 
-
 // ignore: camel_case_types
 class uniCalTile extends StatelessWidget {
   final title;
@@ -21,38 +20,39 @@ class uniCalTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _screenSize = MediaQuery.of(context).size;
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          FittedBox(
+          SizedBox(
+            width: _screenSize.width * 0.70,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   title,
+                  textDirection: TextDirection.rtl,
                   style: TextStyle(
-                      fontSize: 17, color: Theme.of(context).colorScheme.primary),
+                      fontSize: 17,
+                      color: Theme.of(context).colorScheme.primary),
                 ),
                 Text(
-                  dateHij + "  " + date,
-                  style: const TextStyle(
-                      fontSize: 14, color: Colors.black),
+                  "هـ $dateHij  $date م",
+                  style: const TextStyle(fontSize: 14, color: Colors.black),
                 ),
               ],
             ),
           ),
           const SizedBox(
-            width: 30,
+            width: 20,
           ),
           Container(
             alignment: Alignment.center,
             height: double.infinity,
-            // padding: const EdgeInsets.all(2),
-            width: 51
-            ,
+            width: _screenSize.width * 0.15,
             child: FittedBox(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

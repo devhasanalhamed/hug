@@ -10,6 +10,9 @@ import '../providers/auth.dart';
 import '../providers/degree.dart';
 import '../providers/schedule.dart';
 
+import '../widgets/suggestions_widget.dart';
+import '../widgets/changePassword_widget.dart';
+
 class SettingsScreen extends StatefulWidget {
   static String routeName = 'contact_screen';
   const SettingsScreen({Key? key}) : super(key: key);
@@ -44,9 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               Text(
                 _student.name,
-                style: const TextStyle(
-                  fontSize: 15
-                ),
+                style: const TextStyle(fontSize: 15),
               ),
               Text(
                 '${_student.id}',
@@ -55,10 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 30
-                ),
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 30),
                 child: Divider(
                   thickness: 0.5,
                   color: Colors.grey,
@@ -82,9 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           // ),
                           Text(
                             '${_student.wallet}',
-                            style: const TextStyle(
-                              fontSize: 24
-                            ),
+                            style: const TextStyle(fontSize: 24),
                           ),
                         ],
                       ),
@@ -92,7 +88,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         'المحفظة',
                         style: TextStyle(
                           color: Colors.grey,
-                      ),)
+                        ),
+                      )
                     ],
                   ),
                 ],
@@ -113,20 +110,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children:[
+                    children: [
                       ListTile(
-                        onTap: (){
-                          Provider.of<ScheduleProvider>(context,listen: false).getSchedule();
+                        onTap: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (_) {
+                              return ChangePassword(
+                                screenSize: _screenSize,
+                              );
+                            },
+                          );
                         },
-                        title: const Text('تعديل البيانات'),
+                        title: const Text('تعديل كلمة المرور'),
                         leading: Container(
                           width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8)
-                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                           ),
                           child: const Icon(
                             Icons.person,
@@ -135,8 +139,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         trailing: const Icon(Icons.keyboard_arrow_left),
                       ),
                       ListTile(
-                        onTap: (){
-                          Provider.of<SuggestionsProvider>(context,listen: false).postSuggestions();
+                        onTap: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (_) {
+                              return SuggestionsAndComplaints(
+                                screenSize: _screenSize,
+                                student: _student,
+                              );
+                            },
+                          );
                         },
                         title: const Text('الشكاوي والإقتراحات'),
                         leading: Container(
@@ -144,9 +157,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           height: 50,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(8)
-                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                           ),
                           child: const Icon(
                             Icons.comment_outlined,
@@ -155,27 +167,62 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         trailing: const Icon(Icons.keyboard_arrow_left),
                       ),
                       ListTile(
-                        onTap: (){
-                        },
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            actionsAlignment: MainAxisAlignment.center,
+                            title: const Text(
+                              "حول التطبيق",
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SizedBox(
+                              height: _screenSize.height * .30,
+                              child: Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Column(
+                                  children: const [
+                                    Text(
+                                        " طور هذا التطبيق كمشروع مصغر لتخصص هندسة الحاسوب مستوى رابع",
+                                        textAlign: TextAlign.center),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Text(
+                                        "المطورون:\n\n -حسن محمد الحامد\n -مرعي فوزي بن طالب\n -عبد الرحمن بهيان \n -هاله بن هلابي")
+                                  ],
+                                ),
+                              ),
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text('حسناً'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(),
+                              ),
+                            ],
+                          ),
+                        ),
                         title: const Text('حول التطبيق'),
                         leading: Container(
                           width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(8)
-                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                           ),
                           child: const Icon(
-                          Icons.info_outline,
+                            Icons.info_outline,
                           ),
                         ),
                         trailing: const Icon(Icons.keyboard_arrow_left),
                       ),
                       ListTile(
-                        onTap: (){
-                          Provider.of<AuthProvider>(context,listen: false).logout();
+                        onTap: () {
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .logout();
                         },
                         title: const Text('تسجيل الخروج'),
                         leading: Container(
@@ -183,9 +230,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           height: 50,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(8)
-                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
                           ),
                           child: const Icon(
                             Icons.logout,
